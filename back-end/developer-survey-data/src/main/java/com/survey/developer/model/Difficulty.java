@@ -1,6 +1,7 @@
 package com.survey.developer.model;
 
-public enum Difficulty {
+
+public enum Difficulty  {
     IMMEDIATE,
     EASY,
     MEDIUM,

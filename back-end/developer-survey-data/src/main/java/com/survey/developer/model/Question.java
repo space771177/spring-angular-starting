@@ -1,31 +1,34 @@
 package com.survey.developer.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@NoArgsConstructor(force = true)
 @Table(name = "questions")
 public class Question extends BaseEntity{
 
-    private final String subject;
+    private String subject;
 
-    @ManyToOne
-    @JoinColumn(name = "type_id")
-    private final Difficulty difficulty;
+    @Enumerated(EnumType.STRING)
+    private Difficulty difficulty;
 
-    private final boolean isMultipleChoices;
-
-    @ManyToMany
-    private final Set<QuestionCategory> categories;
+    private boolean isMultipleChoices;
 
     @ManyToMany
-    private final Set<QuestionResponse> responses;
+    @JoinTable(name = "questions_categories_join_table", joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<QuestionCategory> categories;
+
+    @ManyToMany
+    @JoinTable(name = "questions_responses_join_table", joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "response_id"))
+    private Set<QuestionResponse> responses;
 
     @Builder
     public Question(Long id, String subject, Difficulty difficulty, boolean isMultipleChoices,
