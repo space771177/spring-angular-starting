@@ -58,6 +58,9 @@ paths:
                       type: string
                       example: "javascript"
 
+                    multipleChoices:
+                      type: boolean
+
                     possibleAnswers:
                       type: array
                       items:
@@ -82,3 +85,6 @@ paths:
       responses:
         "200":
           description: OK
+
+
+
