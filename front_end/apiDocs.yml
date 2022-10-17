@@ -5,8 +5,80 @@ info:
 servers:
   - url: https://api.server.test/v1
 paths:
-  /test:
+  /questions/{category}:
     get:
+      description: Returns a list of questions related to the category (Computer domain, programming language, keywords) specified in the path
+
+      parameters:
+        - name: category
+          in: path
+          required: true
+          description: Computer domain, programming language, keywords to find specific questions
+          schema:
+            type: string
+
+        - name: limit
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: integer
+            default: 10
+
+        - name: starting_after
+          in: query
+          description: Starting offset of fetched questions
+          schema:
+            type: integer
+
+        - name: ending_after
+          in: query
+          description: Ending offset of fetched questions
+          schema:
+            type: integer
+
+      responses:
+        "200":
+          description: Successfully returned a list of questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - text
+                  properties:
+                    subject:
+                      type: string
+                      example: "How do you declare in JavaScript ?"
+                    difficulty:
+                      type: integer
+                      example: 1
+                    category:
+                      type: string
+                      example: "javascript"
+
+                    possibleAnswers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          proposition:
+                            type: string
+                            example: "const myvar = 10"
+
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    post:
+      description: ""
+      parameters: []
       responses:
         "200":
           description: OK
