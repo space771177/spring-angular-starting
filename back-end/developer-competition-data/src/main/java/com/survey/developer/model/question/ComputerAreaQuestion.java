@@ -30,7 +30,7 @@ public class ComputerAreaQuestion extends BaseEntity {
     private Set<ComputerAreaCategory> categories = new HashSet<>();
 
     @OneToMany(mappedBy = "question")
-    private Set<ComputerAreaQuestionCorrectness> questions = new HashSet<>();
+    private Set<ComputerAreaLabeledProposition> propositions = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "competition_id")
@@ -39,12 +39,12 @@ public class ComputerAreaQuestion extends BaseEntity {
 
     @Builder
     public ComputerAreaQuestion(Long id, String subject, Difficulty difficulty, Set<ComputerAreaCategory> categories,
-                                Set<ComputerAreaQuestionCorrectness> questions, ComputerAreaCompetition competition) {
+                                Set<ComputerAreaLabeledProposition> propositions, ComputerAreaCompetition competition) {
         super(id);
         this.subject = subject;
         this.difficulty = difficulty;
         this.categories = categories;
-        this.questions = questions;
+        this.propositions = propositions;
         this.competition = competition;
     }
 
@@ -56,13 +56,5 @@ public class ComputerAreaQuestion extends BaseEntity {
     public void removeCategory(ComputerAreaCategory category){
         this.categories.remove(category);
         category.getQuestions().remove(this);
-    }
-
-    public void addQuestion(ComputerAreaQuestionCorrectness question){
-        this.questions.add(question);
-    }
-
-    public void removeCategory(ComputerAreaQuestionCorrectness question){
-        this.categories.remove(question);
     }
 }
