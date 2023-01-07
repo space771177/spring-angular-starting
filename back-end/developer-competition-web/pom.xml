@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>developer-survey-web</artifactId>
+    <artifactId>developer-competition-web</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

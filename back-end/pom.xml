@@ -4,8 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
 	<modules>
-		<module>developer-survey-data</module>
-		<module>developer-survey-web</module>
+		<module>developer-competition-data</module>
+		<module>developer-competition-web</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
