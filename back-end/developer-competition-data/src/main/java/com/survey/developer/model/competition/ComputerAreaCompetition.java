@@ -4,11 +4,8 @@ import com.survey.developer.model.BaseEntity;
 import com.survey.developer.model.Difficulty;
 import com.survey.developer.model.User.Player;
 import com.survey.developer.model.User.Publisher;
-import com.survey.developer.model.question.ComputerAreaCategory;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.survey.developer.model.question.ComputerAreaQuestion;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -39,7 +36,14 @@ public class ComputerAreaCompetition extends BaseEntity {
 
     private LocalDate startingAt;
 
-    public ComputerAreaCompetition(Long id, String name, int maximumNumberOfPlayers, int numberOfQuestions, Difficulty difficulty, Set<Player> players, Publisher publisher, LocalDate startingAt) {
+    private LocalDate endingAt;
+
+    @OneToMany(mappedBy = "competition")
+    private Set<ComputerAreaQuestion> questions;
+
+    @Builder
+    public ComputerAreaCompetition(Long id, String name, int maximumNumberOfPlayers, int numberOfQuestions, Difficulty difficulty,
+                                   Set<Player> players, Publisher publisher, LocalDate startingAt, LocalDate endingAt, Set<ComputerAreaQuestion> questions) {
         super(id);
         this.name = name;
         this.maximumNumberOfPlayers = maximumNumberOfPlayers;
@@ -48,6 +52,8 @@ public class ComputerAreaCompetition extends BaseEntity {
         this.players = players;
         this.publisher = publisher;
         this.startingAt = startingAt;
+        this.endingAt = endingAt;
+        this.questions = questions;
     }
 
     public void addPlayer(Player player){

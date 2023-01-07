@@ -4,6 +4,7 @@ import com.survey.developer.model.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.Duration;
 
 @Getter
 @Setter
@@ -16,7 +17,11 @@ public class ComputerAreaQuestionCorrectness extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "question_id")
     private ComputerAreaQuestion question;
+
     private boolean isCorrectAnswer;
+    private Duration maximumTime;
+    private int order;
+
     @OneToOne(mappedBy = "questionCorrectness")
     private ComputerAreaLabeledQuestionProposition proposition;
 

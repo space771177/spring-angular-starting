@@ -2,6 +2,7 @@ package com.survey.developer.model.question;
 
 import com.survey.developer.model.BaseEntity;
 import com.survey.developer.model.Difficulty;
+import com.survey.developer.model.competition.ComputerAreaCompetition;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,13 +32,20 @@ public class ComputerAreaQuestion extends BaseEntity {
     @OneToMany(mappedBy = "question")
     private Set<ComputerAreaQuestionCorrectness> questions = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "competition_id")
+    private ComputerAreaCompetition competition;
+
+
     @Builder
-    public ComputerAreaQuestion(Long id, String subject, Difficulty difficulty, Set<ComputerAreaCategory> categories, Set<ComputerAreaQuestionCorrectness> questions) {
+    public ComputerAreaQuestion(Long id, String subject, Difficulty difficulty, Set<ComputerAreaCategory> categories,
+                                Set<ComputerAreaQuestionCorrectness> questions, ComputerAreaCompetition competition) {
         super(id);
         this.subject = subject;
         this.difficulty = difficulty;
         this.categories = categories;
         this.questions = questions;
+        this.competition = competition;
     }
 
     public void addCategory(ComputerAreaCategory category){
