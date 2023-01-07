@@ -4,37 +4,214 @@ info:
   version: "1.0"
 servers:
   - url: https://api.server.test/v1
+
 paths:
-  /questions/{category}:
+  /register:
+    post:
+      description: Register a user
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+
+      responses:
+        "200":
+          description: Successfully registered a user
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserLogged"
+        "409":
+          description: User already in use
+
+  /login:
+    post:
+      description: Login a user
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+
+      responses:
+        "200":
+          description: Successfully logged a user
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserLogged"
+        "401":
+          description: Invalid password
+        "404":
+          description: User not found
+
+  /competitions:
+    post:
+      description: Create a competition
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Competition"
+
+      responses:
+        "200":
+          description: Successfully created a competition
+
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  competition_id:
+                    type: string
+
+      security:
+        - bearerAuth: []
+
+    get:
+      description: Returns a list of competitions related to the category (Computer domain, programming language, keywords) specified in the path
+
+      parameters:
+        - $ref: "#/components/parameters/Category"
+
+        - $ref: "#/components/parameters/Limit"
+
+        - $ref: "#/components/parameters/StartingAfter"
+
+        - $ref: "#/components/parameters/EndingBefore"
+
+        - $ref: "#/components/parameters/SortBy"
+
+        - $ref: "#/components/parameters/OrderBy"
+
+      responses:
+        "200":
+          description: Successfully returned a list of competitions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompetitionGet"
+
+  /competitions/{id}:
+    get:
+      description: Get a competition by it's id
+
+      responses:
+        "200":
+          description: Successfully retrieved a competition
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompetitionGet"
+
+  /competitions/{id}/status:
+    get:
+      description: Get competition status by it's id
+
+      responses:
+        "200":
+          description: Successfully retrieved competition status
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompetitionStatus"
+
+  /competitions/{id}/question_answer:
+    post:
+      description: Answer a question included in the competition
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionAnswer"
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          description: Successfully answered a question
+
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  correct_answer:
+                    type: boolean
+
+        "401":
+          description: Unauthorized credentials
+
+        "403":
+          description: Too late to answer this question
+
+        "404":
+          description: This question is not included in the competition
+
+  /competitions/{id}/users:
+    get:
+      description: Collect the users who participate in the competition
+
+      responses:
+        "200":
+          description: Successfully collected the users who participate in the competition
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserStatus"
+
+  /questions:
+    post:
+      description: Create a question
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionCreation"
+
+      responses:
+        "200":
+          description: Successfully created a question
+
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  question_id:
+                    type: string
+
+      security:
+        - bearerAuth: []
+
     get:
       description: Returns a list of questions related to the category (Computer domain, programming language, keywords) specified in the path
 
       parameters:
-        - name: category
-          in: path
-          required: true
-          description: Computer domain, programming language, keywords to find specific questions
-          schema:
-            type: string
+        - $ref: "#/components/parameters/Category"
 
-        - name: limit
-          in: query
-          description: Limits the number of items on a page
-          schema:
-            type: integer
-            default: 10
+        - $ref: "#/components/parameters/Limit"
 
-        - name: starting_after
-          in: query
-          description: Starting offset of fetched questions
-          schema:
-            type: integer
+        - $ref: "#/components/parameters/StartingAfter"
 
-        - name: ending_after
-          in: query
-          description: Ending offset of fetched questions
-          schema:
-            type: integer
+        - $ref: "#/components/parameters/EndingBefore"
+
+        - $ref: "#/components/parameters/SortBy"
+
+        - $ref: "#/components/parameters/OrderBy"
 
       responses:
         "200":
@@ -42,49 +219,191 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  required:
-                    - text
-                  properties:
-                    subject:
-                      type: string
-                      example: "How do you declare in JavaScript ?"
-                    difficulty:
-                      type: integer
-                      example: 1
-                    category:
-                      type: string
-                      example: "javascript"
+                $ref: "#/components/schemas/Question"
 
-                    multipleChoices:
-                      type: boolean
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
-                    possibleAnswers:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          proposition:
-                            type: string
-                            example: "const myvar = 10"
+  parameters:
+    Category:
+      name: category
+      in: query
+      description: Unique identifier for the category
+      schema:
+        type: string
 
-        "400":
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-    post:
-      description: ""
-      parameters: []
-      responses:
-        "200":
-          description: OK
+    Limit:
+      name: limit
+      in: query
+      description: Limits the number of items on a page
+      schema:
+        type: integer
+        default: 10
 
+    StartingAfter:
+      name: starting_after
+      in: query
+      description: Starting offset
+      schema:
+        type: integer
 
+    EndingBefore:
+      name: ending_before
+      in: query
+      description: Ending offset
+      schema:
+        type: integer
 
+    SortBy:
+      name: sort_by
+      in: query
+      description: Sorting by a specific property
+      schema:
+        type: string
+        example: "created_at"
+
+    OrderBy:
+      name: order_by
+      in: query
+      description: Sorting in ascending or descending order
+      schema:
+        type: string
+        default: "asc"
+
+  schemas:
+    Competition:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        starting_at:
+          type: string
+        maximum_number_of_players:
+          type: integer
+          maximum: 4
+        difficulty:
+          type: string
+        number_of_questions:
+          type: integer
+          maximum: 20
+        publisher:
+          $ref: "#/components/schemas/UserStatus"
+
+    CompetitionGet:
+      type: object
+      properties:
+        competition:
+          type: object
+          properties:
+          $ref: "#/components/schemas/Competition"
+        created_at:
+          type: string
+
+    CompetitionStatus:
+      type: object
+      properties:
+        status:
+          type: string
+        number_of_players:
+          type: string
+        current_question:
+          $ref: "#/components/schemas/Question"
+
+    Question:
+      type: object
+      properties:
+        question_id:
+          type: string
+        subject:
+          type: string
+        difficulty:
+          type: string
+        categories:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+        possible_answers:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              proposition:
+                type: string
+        maximum_time:
+          type: string
+
+    QuestionCreation:
+      type: object
+      properties:
+        subject:
+          type: string
+        difficulty:
+          type: string
+        categories:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+        possible_answers:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              proposition:
+                type: string
+        correct_answers:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+        maximum_time:
+          type: string
+
+    QuestionAnswer:
+      type: object
+      properties:
+        question_id:
+          type: string
+        answers_label:
+          type: array
+          items:
+            type: string
+
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    UserLogged:
+      type: object
+      properties:
+        token:
+          type: string
+        username:
+          type: string
+    UserStatus:
+      type: object
+      properties:
+        username:
+          type: string
+        registered_at:
+          type: string
