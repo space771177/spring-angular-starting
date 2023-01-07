@@ -1,6 +1,6 @@
 package com.survey.developer.model.User;
 
-import com.survey.developer.model.competition.ComputerAreaCompetition;
+import com.survey.developer.model.competition.Competition;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -17,10 +17,10 @@ import java.util.Set;
 public class Publisher extends User {
 
     @OneToMany(mappedBy = "publisher")
-    private Set<ComputerAreaCompetition> competitions;
+    private Set<Competition> competitions;
 
     @Builder
-    public Publisher(Long id, String username, Set<ComputerAreaCompetition> competitions) {
+    public Publisher(Long id, String username, Set<Competition> competitions) {
         super(id, username);
         this.competitions = competitions;
     }

@@ -1,6 +1,6 @@
 package com.survey.developer.model.User;
 
-import com.survey.developer.model.competition.ComputerAreaCompetition;
+import com.survey.developer.model.competition.Competition;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -16,10 +16,10 @@ import java.util.Set;
 @Table(name = "players")
 public class Player extends User {
     @ManyToMany(mappedBy = "players")
-    private Set<ComputerAreaCompetition> competitions;
+    private Set<Competition> competitions;
 
     @Builder
-    public Player(Long id, String username, Set<ComputerAreaCompetition> competitions) {
+    public Player(Long id, String username, Set<Competition> competitions) {
         super(id, username);
         this.competitions = competitions;
     }

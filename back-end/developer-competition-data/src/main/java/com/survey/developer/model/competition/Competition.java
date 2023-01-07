@@ -4,7 +4,7 @@ import com.survey.developer.model.BaseEntity;
 import com.survey.developer.model.Difficulty;
 import com.survey.developer.model.User.Player;
 import com.survey.developer.model.User.Publisher;
-import com.survey.developer.model.question.ComputerAreaQuestion;
+import com.survey.developer.model.question.Question;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,8 +16,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "computer_area_competitions")
-public class ComputerAreaCompetition extends BaseEntity {
+@Table(name = "competitions")
+public class Competition extends BaseEntity {
     private String name;
     private int maximumNumberOfPlayers;
     private int numberOfQuestions;
@@ -26,8 +26,8 @@ public class ComputerAreaCompetition extends BaseEntity {
     private Difficulty difficulty;
 
     @ManyToMany
-    @JoinTable(name = "computer_area_competitions_players_join_table", joinColumns = @JoinColumn(name = "computer_area_competition_id"),
-            inverseJoinColumns = @JoinColumn(name = "computer_area_player_id"))
+    @JoinTable(name = "competitions_players_join_table", joinColumns = @JoinColumn(name = "competition_id"),
+            inverseJoinColumns = @JoinColumn(name = "player_id"))
     private Set<Player> players;
 
     @ManyToOne
@@ -39,11 +39,11 @@ public class ComputerAreaCompetition extends BaseEntity {
     private LocalDate endingAt;
 
     @OneToMany(mappedBy = "competition")
-    private Set<ComputerAreaQuestion> questions;
+    private Set<Question> questions;
 
     @Builder
-    public ComputerAreaCompetition(Long id, String name, int maximumNumberOfPlayers, int numberOfQuestions, Difficulty difficulty,
-                                   Set<Player> players, Publisher publisher, LocalDate startingAt, LocalDate endingAt, Set<ComputerAreaQuestion> questions) {
+    public Competition(Long id, String name, int maximumNumberOfPlayers, int numberOfQuestions, Difficulty difficulty,
+                       Set<Player> players, Publisher publisher, LocalDate startingAt, LocalDate endingAt, Set<Question> questions) {
         super(id);
         this.name = name;
         this.maximumNumberOfPlayers = maximumNumberOfPlayers;

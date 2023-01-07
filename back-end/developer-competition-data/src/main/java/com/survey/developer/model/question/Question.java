@@ -2,7 +2,7 @@ package com.survey.developer.model.question;
 
 import com.survey.developer.model.BaseEntity;
 import com.survey.developer.model.Difficulty;
-import com.survey.developer.model.competition.ComputerAreaCompetition;
+import com.survey.developer.model.competition.Competition;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,8 +14,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "computer_area_questions")
-public class ComputerAreaQuestion extends BaseEntity {
+@Table(name = "questions")
+public class Question extends BaseEntity {
 
     @Column(name = "subject")
     private String subject;
@@ -25,21 +25,21 @@ public class ComputerAreaQuestion extends BaseEntity {
     private Difficulty difficulty;
 
     @ManyToMany
-    @JoinTable(name = "computer_area_questions_categories_join_table", joinColumns = @JoinColumn(name = "computer_area_question_id"),
-            inverseJoinColumns = @JoinColumn(name = "computer_area_category_id"))
-    private Set<ComputerAreaCategory> categories = new HashSet<>();
+    @JoinTable(name = "questions_categories_join_table", joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
 
     @OneToMany(mappedBy = "question")
-    private Set<ComputerAreaLabeledProposition> propositions = new HashSet<>();
+    private Set<LabeledProposition> propositions = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "competition_id")
-    private ComputerAreaCompetition competition;
+    private Competition competition;
 
 
     @Builder
-    public ComputerAreaQuestion(Long id, String subject, Difficulty difficulty, Set<ComputerAreaCategory> categories,
-                                Set<ComputerAreaLabeledProposition> propositions, ComputerAreaCompetition competition) {
+    public Question(Long id, String subject, Difficulty difficulty, Set<Category> categories,
+                    Set<LabeledProposition> propositions, Competition competition) {
         super(id);
         this.subject = subject;
         this.difficulty = difficulty;
@@ -48,12 +48,12 @@ public class ComputerAreaQuestion extends BaseEntity {
         this.competition = competition;
     }
 
-    public void addCategory(ComputerAreaCategory category){
+    public void addCategory(Category category){
         this.categories.add(category);
         category.getQuestions().add(this);
     }
 
-    public void removeCategory(ComputerAreaCategory category){
+    public void removeCategory(Category category){
         this.categories.remove(category);
         category.getQuestions().remove(this);
     }
