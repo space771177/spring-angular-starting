@@ -172,6 +172,33 @@ paths:
                 items:
                   $ref: "#/components/schemas/UserStatus"
 
+  /competitions/{id}/results:
+    get:
+      description: Collect the results of the players in the competition
+
+      responses:
+        "200":
+          description: Successfully collected the users who participate in the competition
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                    ranking:
+                      type: number
+                    correct_answers:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/LabeledQuestion"
+                    wrong_answers:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/LabeledQuestion"
+
   /questions:
     post:
       description: Create a question
@@ -343,6 +370,14 @@ components:
         maximum_time:
           type: string
 
+    LabeledQuestion:
+      type: object
+      properties:
+        label:
+          type: string
+        proposition:
+          type: string
+
     QuestionCreation:
       type: object
       properties:
@@ -360,12 +395,7 @@ components:
         possible_answers:
           type: array
           items:
-            type: object
-            properties:
-              label:
-                type: string
-              proposition:
-                type: string
+            $ref: "#/components/schemas/LabeledQuestion"
         correct_answers:
           type: array
           items:
