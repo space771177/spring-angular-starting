@@ -6,6 +6,7 @@ import com.survey.developer.model.competition.Competition;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,16 +37,21 @@ public class Question extends BaseEntity {
     @JoinColumn(name = "competition_id")
     private Competition competition;
 
+    private Duration maximumTime;
+
+    private int order;
 
     @Builder
     public Question(Long id, String subject, Difficulty difficulty, Set<Category> categories,
-                    Set<LabeledProposition> propositions, Competition competition) {
+                    Set<LabeledProposition> propositions, Competition competition, Duration maximumTime, int order) {
         super(id);
         this.subject = subject;
         this.difficulty = difficulty;
         this.categories = categories;
         this.propositions = propositions;
         this.competition = competition;
+        this.maximumTime = maximumTime;
+        this.order = order;
     }
 
     public void addCategory(Category category){

@@ -19,18 +19,14 @@ public class LabeledProposition extends BaseEntity {
     private String label;
     private String proposition;
     private boolean isCorrectAnswer;
-    private Duration maximumTime;
-    private int order;
 
     @Builder
     public LabeledProposition(Long id, Question question, String label, String proposition,
-                              boolean isCorrectAnswer, Duration maximumTime, int order) {
+                              boolean isCorrectAnswer) {
         super(id);
         this.question = question;
         this.label = label;
         this.proposition = proposition;
         this.isCorrectAnswer = isCorrectAnswer;
-        this.maximumTime = maximumTime;
-        this.order = order;
     }
 }
