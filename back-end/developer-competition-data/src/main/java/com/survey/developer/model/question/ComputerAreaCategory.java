@@ -1,6 +1,7 @@
 package com.survey.developer.model.question;
 
 import com.survey.developer.model.BaseEntity;
+import com.survey.developer.model.question.ComputerAreaQuestion;
 import lombok.*;
 
 import javax.persistence.Entity;
