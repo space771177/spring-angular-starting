@@ -1,5 +1,6 @@
-package com.survey.developer.model;
+package com.survey.developer.model.question;
 
+import com.survey.developer.model.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -12,16 +13,16 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "questions_categories")
-public class QuestionCategory extends BaseEntity{
+@Table(name = "computer_area_categories")
+public class ComputerAreaCategory extends BaseEntity {
 
     private String name;
 
     @ManyToMany(mappedBy = "categories")
-    private Set<Question> questions;
+    private Set<ComputerAreaQuestion> questions;
 
     @Builder
-    public QuestionCategory(Long id, String name) {
+    public ComputerAreaCategory(Long id, String name) {
         super(id);
         this.name = name;
     }
